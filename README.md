@@ -1,1 +1,1 @@
-"# dog-detector" 
+# dog-detector 
