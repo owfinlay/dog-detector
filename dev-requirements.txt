@@ -1,1 +1,6 @@
 datasets
+ipykernel
+transformers
+torch
+wget
+timm
