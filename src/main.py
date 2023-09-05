@@ -59,17 +59,18 @@ def callback(in_data, frame_count, time_info, status_flags):
 	return (None, pyaudio.paContinue)
 
 
-with pa.open(
+stream = pa.open(
 	rate = samplerate,
 	format = pyaudio.paFloat32,
 	channels = 1,
 	frames_per_buffer = chunksize,
 	input = True,
 	stream_callback = callback
-) as stream:
-	inp = ""
-	while inp != "stop":
-		inp = input("Listening... type 'stop' to end the stream ~\n\t")
+)
+inp = ""
+while inp != "stop":
+	inp = input("Listening... type 'stop' to end the stream ~\n\t")
 
+stream.close()
 pa.terminate()
 print(f"Classified sounds {potential_barks} times. {actual_barks} of them were barks.")
