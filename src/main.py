@@ -27,7 +27,6 @@ device_defaults = pa.get_default_input_device_info()
 if device_defaults['maxInputChannels'] == 0:
 	print("No suitable input channel")
 	sys.exit(1)
-
 del device_defaults
 
 SENSITIVITY = 5 # default
@@ -68,7 +67,6 @@ with pa.open(
 	input = True,
 	stream_callback = callback
 ) as stream:
-
 	inp = ""
 	while inp != "stop":
 		inp = input("Listening... type 'stop' to end the stream ~\n\t")
