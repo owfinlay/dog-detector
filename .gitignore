@@ -1,2 +1,4 @@
 src/audioset_10_10_0.4593.pth
 dev/
+
+__pycache__/
