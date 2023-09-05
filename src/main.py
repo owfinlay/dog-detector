@@ -27,6 +27,7 @@ device_defaults = pa.get_default_input_device_info()
 if device_defaults['maxInputChannels'] == 0:
 	print("No suitable input channel")
 	sys.exit(1)
+
 del device_defaults
 
 SENSITIVITY = 5 # default
@@ -39,10 +40,11 @@ frames = np.zeros((31, 512))
 check_flags = [False] * 31
 
 potential_barks = 0
+actual_barks = 0
 
 def callback(in_data, frame_count, time_info, status_flags):
 	global frames, check_flags, sensitivity
-	global potential_barks
+	global potential_barks, actual_barks
 
 	id_num = np.frombuffer(in_data, dtype=np.float32)
 
@@ -53,8 +55,10 @@ def callback(in_data, frame_count, time_info, status_flags):
 		potential_barks += 1
 		if classify_as_bark(frames):
 			notify("URL")
+			actual_barks += 1
 
 	return (None, pyaudio.paContinue)
+
 
 with pa.open(
 	rate = samplerate,
@@ -64,8 +68,10 @@ with pa.open(
 	input = True,
 	stream_callback = callback
 ) as stream:
+
 	inp = ""
 	while inp != "stop":
 		inp = input("Listening... type 'stop' to end the stream ~\n\t")
 
 pa.terminate()
+print(f"Classified sounds {potential_barks} times. {actual_barks} of them were barks.")
