@@ -1,6 +1,5 @@
-FROM python:alpine3.18
+FROM python:slim AS builder
 
-RUN pip3 install -r ./requirements.txt
+RUN python3 build_model.py
 
-RUN python3 run.py
-
+FROM python:alpine3.18 AS devo
