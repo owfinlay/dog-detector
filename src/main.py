@@ -5,7 +5,7 @@ from model import _classify
 import numpy as np
 
 def update_frames(frames: np.ndarray, id_num: np.ndarray):
-	return np.vstack([frames[1:], id_num])
+	return np.vstack([frames[1:,], id_num])
 
 def update_chfls(check_flags: list[bool], id_num: np.ndarray, sensitivity: int):
 	check_this_one = False
@@ -35,7 +35,7 @@ samplerate = 16000
 chunksize = 512
 sensitivity = os.environ.get("SENSITIVITY", SENSITIVITY)
 
-frames = np.zeros((31, 512))
+frames = np.zeros((31, 512), dtype=np.float32)
 check_flags = [False] * 31
 
 potential_barks = 0
@@ -53,7 +53,7 @@ def callback(in_data, frame_count, time_info, status_flags):
 	if any(check_flags):
 		potential_barks += 1
 		if classify_as_bark(frames):
-			notify("URL")
+			print("Got one!")
 			actual_barks += 1
 
 	return (None, pyaudio.paContinue)
