@@ -5,7 +5,7 @@ import numpy as np
 
 def normalize(arr: np.ndarray) -> np.ndarray:
 	"""goto range [-1,1]; assumes all are positive"""
-	zerodiff = (arr.min() + arr.max()) / 2
+	zerodiff = arr.min() + ((arr.max() - arr.min()) / 2)
 	new_arr = (arr - zerodiff)
 	new_arr = (new_arr / new_arr.max()).flatten()
 	return new_arr[:15600]
@@ -28,7 +28,7 @@ def _classify(input_arr: np.ndarray) -> bool:
 	return(bark_probability >= .5)
 
 def _test_response():
-	return "1"
+	return random.random() > 0.8
 
 def _print_details():
 	model_path = "yamnet_classification.tflite"
