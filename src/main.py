@@ -27,7 +27,6 @@ device_defaults = pa.get_default_input_device_info()
 if device_defaults['maxInputChannels'] == 0:
 	print("No suitable input channel")
 	sys.exit(1)
-
 del device_defaults
 
 SENSITIVITY = 5 # default
@@ -57,7 +56,6 @@ def callback(in_data, frame_count, time_info, status_flags):
 
 	return (None, pyaudio.paContinue)
 
-
 with pa.open(
 	rate = samplerate,
 	format = pyaudio.paFloat32,
@@ -66,7 +64,6 @@ with pa.open(
 	input = True,
 	stream_callback = callback
 ) as stream:
-
 	inp = ""
 	while inp != "stop":
 		inp = input("Listening... type 'stop' to end the stream ~\n\t")
