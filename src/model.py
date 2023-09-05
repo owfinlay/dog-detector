@@ -5,9 +5,9 @@ import numpy as np
 
 def _normalize(arr: np.ndarray):
 	"""goto range [-1,1]; assumes all are positive"""
-	zerodiff = min(arr) + ((max(arr) - min(arr)) / 2)
+	zerodiff = arr.min() + ((arr.max() - arr.min()) / 2)
 	new_arr = (arr - zerodiff)
-	new_arr = new_arr / max(new_arr)
+	new_arr = new_arr / new_arr.max()
 	return new_arr
 
 def _classify(input_arr: np.ndarray):
@@ -24,8 +24,7 @@ def _classify(input_arr: np.ndarray):
 	interpreter.invoke()
 
 	output_data = interpreter.get_tensor(output_index)
-	print(output_data)
-	return random.random >= 0.81
+	return output_data[0][70] >= 0.5
 
 def _test_response():
 	return "1"
