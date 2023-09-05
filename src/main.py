@@ -43,7 +43,7 @@ def classify(frames):
 		Boolean, True if bark else False
 	"""
 	print("Do something with frames here later")
-	return _classify(frames)
+	return _classify_fake(frames)
 
 
 def notify(path: str):
