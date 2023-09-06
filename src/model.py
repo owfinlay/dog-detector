@@ -5,7 +5,7 @@ import numpy as np
 
 def normalize(arr: np.ndarray) -> np.ndarray:
 	"""goto range [-1,1]; assumes all are positive"""
-	zerodiff = arr.min() + ((arr.max() - arr.min()) / 2)
+	zerodiff = (arr.max() + arr.min()) / 2
 	new_arr = (arr - zerodiff)
 	new_arr = (new_arr / new_arr.max()).flatten()
 	return new_arr[:15600]
