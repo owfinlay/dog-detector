@@ -14,5 +14,5 @@ machine = platform.machine()
 with open("requirements.txt", "a") as requirements:
     requirements.write(
         "\n",
-        str(path / base.format(versions[machine]))
+        base.format(versions[machine])
     )
