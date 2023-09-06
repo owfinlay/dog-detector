@@ -1,4 +1,13 @@
-FROM python:3.9-alpine3.18
+FROM python:3.9-alpine3.18 AS tflite_accom
+
+WORKDIR /app
+
+RUN mkdir resources
+COPY requirements.txt /app/
+
+
+
+
 RUN mkdir -p /app 
 COPY . /app
 WORKDIR /app
