@@ -1,36 +1,32 @@
-<<<<<<< HEAD
-FROM python:3.9-alpine3.18 AS tflite_runtime_accomodation
+FROM alpine:3.14 AS bldr
 
-=======
-FROM python:3.9-alpine3.18 AS tflite_accom
+RUN [ "apk", "add", "py3-pyaudio", "--no-cache" ]
+
 
 WORKDIR /app
+RUN mkdir -p resources
 
-RUN mkdir resources
-COPY requirements.txt /app/
-
-
-
-
-RUN mkdir -p /app 
-COPY . /app
->>>>>>> 7e4c6b863a81a4e52b15ae031d69ce5bcae0f3a8
-WORKDIR /app
-MKDIR /resources
-
-COPY resources/*.whl /resources/
-COPY tflite_version.py ./
-COPY requirements.txt ./
+COPY resources/*.whl resources
+COPY tflite_version.py .
+COPY requirements.txt .
 
 RUN python3 tflite_version.py
 
 
 FROM python:3.9-alpine3.18
-
 WORKDIR /app
-MKDIR /resources
+RUN mkdir -p resources
 
-COPY --from=tflite_runtime_accomodation requirements.txt ./
+COPY --from=bldr requirements.txt .
+
+RUN grep 
+
+
 RUN pip install -r requirements.txt --no-cache-dir
 
-#CMD [ "python3", "main.py" ]
+COPY main.py .
+COPY model.py .
+
+
+
+#ENTRYPOINT [ "python3", "main.py" ]
