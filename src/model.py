@@ -14,7 +14,7 @@ def normalize(arr: np.ndarray) -> np.ndarray:
 	new_arr = (new_arr / new_arr.max()).flatten()
 	return new_arr[:15600]
 
-def _classify(input_arr: np.ndarray) -> bool:
+def _classify(input_arr: np.ndarray, sensitivity: int) -> bool:
 	"""Classification"""
 	model_path = "E:\\Learning\\DS_Comms\\upwork\\DDD\\src\\src\\yamnet_classification.tflite"
 	normed_arr = normalize(input_arr)
@@ -29,7 +29,7 @@ def _classify(input_arr: np.ndarray) -> bool:
 
 	output_data = interpreter.get_tensor(output_details[0]['index'])
 	bark_probability = output_data[0][70]
-	return(bark_probability >= .5)
+	return(bark_probability >= (sensitivity * 0.1))
 
 def _test_response():
 	return random.random() > 0.8
