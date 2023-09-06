@@ -29,11 +29,13 @@ if device_defaults['maxInputChannels'] == 0:
 	sys.exit(1)
 del device_defaults
 
-SENSITIVITY = 5 # default
-
+SENSITIVITY = 5 # caps is default
+DECISION_THRESHOLD = 4
 samplerate = 16000
 chunksize = 512
-sensitivity = os.environ.get("SENSITIVITY", SENSITIVITY)
+
+sensitivity = os.environ.get("SENSITIVITY", SENSITIVITY) # editable via environment variables
+decision_threshold = os.environ.get("DECISION_THRESHOLD", DECISION_THRESHOLD)
 
 frames = np.zeros((31, 512), dtype=np.float32)
 check_flags = [False] * 31
@@ -42,7 +44,7 @@ potential_barks = 0
 actual_barks = 0
 
 def callback(in_data, frame_count, time_info, status_flags):
-	global frames, check_flags, sensitivity
+	global frames, check_flags, sensitivity, decision_threshold
 	global potential_barks, actual_barks
 
 	id_num = np.frombuffer(in_data, dtype=np.float32)
@@ -52,10 +54,11 @@ def callback(in_data, frame_count, time_info, status_flags):
 
 	if any(check_flags):
 		potential_barks += 1
-		if classify_as_bark(frames):
+		if classify_as_bark(frames, decision_threshold):
 			print("Got one!")
 			actual_barks += 1
 
+	print("\n\t", end="")
 	return (None, pyaudio.paContinue)
 
 
