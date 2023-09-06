@@ -3,6 +3,10 @@ import random
 import tflite_runtime.interpreter as tflite
 import numpy as np
 
+def get_model_path():
+	import os
+	return 
+
 def normalize(arr: np.ndarray) -> np.ndarray:
 	"""goto range [-1,1]; assumes all are positive"""
 	zerodiff = arr.min() + ((arr.max() - arr.min()) / 2)
