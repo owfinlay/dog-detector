@@ -1,16 +1,28 @@
-"""Go get the proper tflite runtime from resources/"""
-import os, platform
+"""script for builder step"""
+def edit_reqs():
+    import platform
 
+    base_str = "resources/tflite_runtime-2.5.0.post1-cp39-cp39-linux_{}.whl"
+    interim = {
+        "AARCH64": "aarch64",
+        "ARMV71": "armv71",
+        "x86_64": "x86_64"
+    }
+    machine = platform.machine()
+    rel_pathstr = base_str.format(interim[machine])
 
-base_str = "resources/tflite_runtime-2.5.0.post1-cp39-cp39-linux_{}.whl"
+    with open("requirements.txt", "a") as reqs:
+        reqs.write("\n" + rel_pathstr)
 
-version = {
-    "AARCH64": "aarch64",
-    "ARMV71": "armv71",
-    "x86_64": "x86_64"
-}
-machine = platform.machine()
-to_add = base_str.format(version[machine])
+def rm_extra_runtimes():
+    import os, pathlib
 
-with open("requirements.txt", "a") as reqs:
-    reqs.write("\n" + to_add)
+    rel_wheel = pathlib.Path(rel_pathstr)
+
+    other_wheels = [f for f in rel_path.glob("*/*.whl") if f != rel_wheel]
+    for f in other_wheels:
+        os.remove(f)
+
+if __name__ == "__main__":
+    edit_reqs()
+    rm_extra_runtimes()
