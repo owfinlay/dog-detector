@@ -19,7 +19,7 @@ WORKDIR /app
 RUN mkdir -p resources
 
 COPY --from=bldr resources .
-COPY resouces/yamnet_classification.tflite resources/
+COPY resources/yamnet_classification.tflite resources/
 
 RUN pip install -r requirements.txt --no-cache-dir
 
