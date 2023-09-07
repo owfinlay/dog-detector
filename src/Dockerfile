@@ -2,7 +2,10 @@
 # builder step is required to pick tflite runtime corresponding to machine arch
 FROM alpine:3.14 AS bldr
 
+WORKDIR app
 RUN mkdir -p resources
+
+RUN apk add gcc --no-cache
 
 COPY resources/*.whl resources
 COPY tflite_version.py .
@@ -17,10 +20,10 @@ RUN python3 tflite_version.py
 
 FROM alpine:3.14 AS final
 
-WORKDIR /app
+WORKDIR app
 RUN mkdir -p resources
 
-COPY --from=bldr resources .
+COPY --from=bldr app/resources/ .
 COPY resources/yamnet_classification.tflite resources/
 
 RUN apk add py3-pip --no-cache
