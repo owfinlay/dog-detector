@@ -1,7 +1,6 @@
 """script for builder step"""
 def main():
     import platform
-
     base_str = "resources/tflite_runtime-2.5.0.post1-cp39-cp39-linux_{}.whl"
     interim = {
         "AARCH64": "aarch64",
@@ -16,9 +15,9 @@ def main():
 
 
     import os, pathlib
-
+    res_path = pathlib.Path("resources")
     other_wheels = [f 
-        for f in rel_path.glob("*/*.whl") 
+        for f in res_path.glob("*/*.whl") 
         if f != pathlib.Path(rel_pathstr)]
 
     for f in other_wheels:
