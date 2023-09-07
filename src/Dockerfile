@@ -23,6 +23,7 @@ RUN mkdir -p resources
 COPY --from=bldr resources .
 COPY resources/yamnet_classification.tflite resources/
 
+RUN apk add py3-pip --no-cache
 RUN pip install -r requirements.txt --no-cache-dir
 
 COPY main.py .
