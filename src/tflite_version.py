@@ -13,8 +13,9 @@ def edit_reqs():
 
     with open("requirements.txt", "a") as reqs:
         reqs.write("\n" + rel_pathstr)
+    return rel_pathstr
 
-def rm_extra_runtimes():
+def rm_extra_runtimes(rel_pathstr):
     import os, pathlib
 
     rel_wheel = pathlib.Path(rel_pathstr)
@@ -24,5 +25,5 @@ def rm_extra_runtimes():
         os.remove(f)
 
 if __name__ == "__main__":
-    edit_reqs()
-    rm_extra_runtimes()
+    pathstr = edit_reqs()
+    rm_extra_runtimes(pathstr)
