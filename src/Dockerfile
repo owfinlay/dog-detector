@@ -8,6 +8,8 @@ COPY resources/*.whl resources
 COPY tflite_version.py .
 COPY requirements.txt .
 
+RUN apk add python3 --no-cache
+
 # saves tflite_runtime wheel to requirements; deletes others from filesystem
 RUN python3 tflite_version.py
 
