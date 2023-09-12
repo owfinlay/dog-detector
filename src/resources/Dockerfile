@@ -2,22 +2,22 @@
 FROM python:3.9.18-slim-bullseye AS bldr
 WORKDIR app
 
-ARG ARCH=$(uname -m)
 RUN apt update && \
-	apt install portaudio19-dev -y && \
 	apt install gcc -y
-COPY . resources
-RUN python3 -m venv venv
-RUN	/bin/bash -c "source venv/bin/activate"
+COPY . resources/*.whl
 
 
-# --prefix=/installs (if venv fails)
-RUN pip \ 
-	install pyaudio \
-	resources/tflite_runtime-2.5.0.post1-cp39-cp39-linux_${ARCH}.whl
+RUN pip install \
+	resources/tflite_runtime-2.5.0.post1-cp39-cp39-linux_$(uname -m).whl
 
 
-FROM python:3.9.18-slim-bullseye
-WORKDIR app
 
-COPY --from=bldr /venv .
+FROM python:3.9.18-slim-bullseye AS final
+
+COPY --from=bldr /usr/local/lib/python3.9/site-packages/tflite*/ \
+	/usr/local/lib/python3.9/site-packages/
+COPY --from=bldr 
+
+RUN apt update && \
+	apt install portaudio19-dev
+RUN pip install pyaudio==0.2.13 requests==2.31.0

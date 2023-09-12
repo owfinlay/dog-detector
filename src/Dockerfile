@@ -33,4 +33,7 @@ COPY main.py .
 COPY model.py .
 
 
+
+
+
 ENTRYPOINT [ "python3", "main.py" ]
