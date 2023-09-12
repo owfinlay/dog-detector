@@ -4,6 +4,15 @@ import os, sys, requests
 from model import _classify
 import numpy as np
 
+pa = pyaudio.PyAudio()
+
+device_defaults = pa.get_default_input_device_info()
+if device_defaults['maxInputChannels'] == 0:
+	print("No suitable input channel")
+	sys.exit(1)
+del device_defaults
+
+
 def update_frames(frames: np.ndarray, id_num: np.ndarray):
 	return np.vstack([frames[1:,], id_num])
 
@@ -21,15 +30,7 @@ def notify(path: str):
 	print("Do some URL thing here later")
 
 
-pa = pyaudio.PyAudio()
-
-device_defaults = pa.get_default_input_device_info()
-if device_defaults['maxInputChannels'] == 0:
-	print("No suitable input channel")
-	sys.exit(1)
-del device_defaults
-
-SENSITIVITY = 5 # caps is default
+SENSITIVITY = 5 # caps means default
 DECISION_THRESHOLD = 4
 samplerate = 16000
 chunksize = 512
@@ -40,12 +41,8 @@ decision_threshold = os.environ.get("DECISION_THRESHOLD", DECISION_THRESHOLD)
 frames = np.zeros((31, 512), dtype=np.float32)
 check_flags = [False] * 31
 
-potential_barks = 0
-actual_barks = 0
-
 def callback(in_data, frame_count, time_info, status_flags):
 	global frames, check_flags, sensitivity, decision_threshold
-	global potential_barks, actual_barks
 
 	id_num = np.frombuffer(in_data, dtype=np.float32)
 
@@ -76,4 +73,3 @@ while inp != "stop":
 
 stream.close()
 pa.terminate()
-print(f"Classified sounds {potential_barks} times. {actual_barks} of them were barks.")
