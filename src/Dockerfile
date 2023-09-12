@@ -1,39 +1,28 @@
-
-# builder step is required to pick tflite runtime corresponding to machine arch
-FROM alpine:3.14 AS bldr
-
-WORKDIR app
-RUN mkdir -p resources
-
-RUN apk add gcc --no-cache
-
-COPY resources/*.whl resources
-COPY tflite_version.py .
-COPY requirements.txt .
-
-RUN apk add python3 --no-cache
-
-# saves tflite_runtime wheel to requirements; deletes others from filesystem
-RUN python3 tflite_version.py
+FROM python:3.9.18-slim-bullseye
+WORKDIR /app
 
 
+RUN apt update && \
+    apt install gcc -y && \
+    apt install portaudio19-dev -y
 
-FROM alpine:3.14 AS final
+COPY resources/ resources/
+RUN pip install \
+    pyaudio \
+    requests \
+    resouces/tflite_runtime-2.5.0.post1-cp39-cp39-linux_$(uname -m).whl
 
-WORKDIR app
-RUN mkdir -p resources
 
-COPY --from=bldr app/resources/ .
-COPY resources/yamnet_classification.tflite resources/
+FROM python:3.9.18-slim-bullseye AS final
+WORKDIR /app
 
-RUN apk add py3-pip --no-cache
-RUN pip install -r requirements.txt --no-cache-dir
+RUN apt update && apt install portaudio19-dev -y
+RUN rm -rf /usr/local/lib/python3.9/site-packages
 
+COPY --from=bldr \
+    /usr/local/lib/python3.9/site-packages \
+    /usr/local/lib/python3.9/site-packages
 COPY main.py .
 COPY model.py .
-
-
-
-
 
 ENTRYPOINT [ "python3", "main.py" ]
