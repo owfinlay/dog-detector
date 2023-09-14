@@ -4,13 +4,15 @@ This is a project for dog-bark-detection and dog-inspired notification. There is
 ## How to Use
 
 1. Grab from github
-
-`git clone https://github.com/owfinlay/dog-detector --depth=1`
+```
+git clone https://github.com/owfinlay/dog-detector --depth=1
+```
 
 2. Navigate to folder and build
-
-`cd dog-detector`
-`docker build . -t dog-det`
+```
+cd dog-detector
+docker build . -t dog-det
+```
 
 3. Run the following command
 
