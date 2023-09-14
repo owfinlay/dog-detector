@@ -1,4 +1,4 @@
-FROM python:3.9.18-slim-bullseye
+FROM python:3.9.18-slim-bullseye AS bldr
 WORKDIR /app
 
 
@@ -10,10 +10,10 @@ COPY resources/ resources/
 RUN pip install \
     pyaudio \
     requests \
-    resouces/tflite_runtime-2.5.0.post1-cp39-cp39-linux_$(uname -m).whl
+    resources/tflite_runtime-2.5.0.post1-cp39-cp39-linux_$(uname -m).whl
 
 
-FROM python:3.9.18-slim-bullseye AS final
+FROM python:3.9.18-slim-bullseye
 WORKDIR /app
 
 RUN apt update && apt install portaudio19-dev -y

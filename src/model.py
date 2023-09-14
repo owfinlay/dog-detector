@@ -12,10 +12,10 @@ def normalize(arr: np.ndarray) -> np.ndarray:
 
 def _classify(input_arr: np.ndarray, decision_threshold: int) -> bool:
 	"""model loading, setting & invocation"""
-	model_path = pathlib.Path("resources/yamnet_classification.tflite")
 	normed_arr = normalize(input_arr)
-
-	interpreter = tflite.Interpreter(model_path)
+	interpreter = tflite.Interpreter(
+		model_path="src\\resources\\yamnet_classification.tflite"
+	)
 	input_details = interpreter.get_input_details()
 	output_details = interpreter.get_output_details()
 
@@ -28,8 +28,10 @@ def _classify(input_arr: np.ndarray, decision_threshold: int) -> bool:
 	return(bark_probability >= (decision_threshold * 0.1))
 
 def print_details():
-	model_path = pathlib.Path("resources/yamnet_classification.tflite")
-	interpreter = tflite.Interpreter(model_path)\
+	# model_path = pathlib.Path("resources/yamnet_classification.tflite")
+	interpreter = tflite.Interpreter(
+		model_path="resources\\yamnet_classification.tflite"
+	)
 
 	print("Input details: ", interpreter.get_input_details())
 	print("\nOutput details: ", interpreter.get_output_details())
