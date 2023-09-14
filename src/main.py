@@ -22,15 +22,15 @@ def update_chfls(check_flags: list[bool], id_num: np.ndarray, sensitivity: int):
 		check_this_one = True
 	return check_flags[1:] + [check_this_one]
 
-def classify_as_bark(frames: np.ndarray):
-	return _classify(frames)
+def classify_as_bark(frames: np.ndarray, decision_threshold: int):
+	return _classify(frames, decision_threshold)
 
 def notify(path: str):
 	"""Placeholder for Arnold's URL call"""
 	print("Do some URL thing here later")
 
 
-SENSITIVITY = 5 # caps means default
+SENSITIVITY = 5
 DECISION_THRESHOLD = 4
 samplerate = 16000
 chunksize = 512
@@ -50,12 +50,9 @@ def callback(in_data, frame_count, time_info, status_flags):
 	check_flags = update_chfls(check_flags, id_num, sensitivity)
 
 	if any(check_flags):
-		potential_barks += 1
 		if classify_as_bark(frames, decision_threshold):
-			print("Got one!")
-			actual_barks += 1
+			print("Got one!\n")
 
-	print("\n\t", end="")
 	return (None, pyaudio.paContinue)
 
 
